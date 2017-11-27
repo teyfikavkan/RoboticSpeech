@@ -1,6 +1,6 @@
 import speech_recognition as sr
 import pyaudio
-
+import sys
 # talkSpeechToText() function gets our voice by using computer microphone and
 # it returns what we are saying to computer as a string
 def talkSpeechToText():
@@ -23,5 +23,6 @@ def talkSpeechToText():
         try:
             print("Google thinks you said: \n"+r.recognize_google(audio,language="tr-TR"))
         except:
-            pass
+            e = sys.exc_info()[0]
+            print(e)
         return r.recognize_google(audio,language="tr-TR")
