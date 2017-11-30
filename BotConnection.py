@@ -1,12 +1,16 @@
 import requests
 import json
+import os
 # connectBot(myspeech) function takes the argument "myspeech" and
 # it returns a string as the response of our talk
+def deleteAllRecords():
+    dirPath = "records"
+    fileList = os.listdir(dirPath)
+    for FileName in fileList:
+        os.remove(dirPath + "/" + FileName)
+
 def connectBot(myspeech):
     url = "http://api.dahi.ai/dahi/bot/tkn/59f307dfe4b0f7db8924368b"
-
-
-
     values ="""
         {
         'recipientId': 'rec1',
@@ -17,7 +21,6 @@ def connectBot(myspeech):
         }
       }
     """
-
 
     headers = {
         'Content-Type': 'application/json'
@@ -33,6 +36,7 @@ def connectBot(myspeech):
 
     #fetching response as json object
     response = request.json()
+
 
     if response['result'] == None:
         print('[BOT]: idk yet')
