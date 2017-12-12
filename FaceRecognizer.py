@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
 import cv2
 import FaceTrainer
 import FaceDetection
 import FaceConfig
 
 
-def RecognizeFace(image, faceCascade, eyeCascade, faceSize, threshold):
+def RecognizeFace(image, faceCascade, eyeCascade, faceSize, threshold,recognizer):
     found_faces = []
 
     gray, faces = FaceDetection.detectFaces(image, faceCascade, eyeCascade, returnGray=1)
@@ -24,7 +25,9 @@ def RecognizeFace(image, faceCascade, eyeCascade, faceSize, threshold):
     return found_faces
 
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
+def FaceRecognize():
+
     faceCascade = cv2.CascadeClassifier(FaceConfig.FACE_CASCADE_FILE)
     eyeCascade = cv2.CascadeClassifier(FaceConfig.EYE_CASCADE_FILE)
     faceSize = FaceConfig.DEFAULT_FACE_SIZE
@@ -32,22 +35,26 @@ if __name__ == '__main__':
     labelinfo=[]
 
     labelinfo,recognizer= FaceTrainer.trainRecognizer('dataSet',faceSize, showFaces=False,forceTrain=True)
-    ##LabelInfo=train.getFaceLabel('dataSet',faceSize, showFaces=False,forceTrain=True)
 
+    name=None
     cv2.namedWindow("camera", 1)
     capture = cv2.VideoCapture(0)
     while True:
         retval, img = capture.read()
 
-        for (label, confidence, (x, y, w, h)) in RecognizeFace(img, faceCascade, eyeCascade, faceSize, threshold):
+        for (label, confidence, (x, y, w, h)) in RecognizeFace(img, faceCascade, eyeCascade, faceSize, threshold,recognizer):
 
             cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
 
-            print(labelinfo[label][1])
-            cv2.putText(img, "{} = {}".format(labelinfo[label][1], int(confidence)), (x, y), cv2.cv.CV_FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2, cv2.CV_AA)
-
+            #print(labelinfo[label][1])
+            if(confidence<70):
+                cv2.putText(img, "{} = {}".format(labelinfo[label][1], int(confidence)), (x, y), cv2.cv.CV_FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2, cv2.CV_AA)
+                name=labelinfo[label][1]
+                break
         cv2.imshow("camera", img)
 
-        if cv2.waitKey(30) & 0xFF == ord('q'):
+        #if cv2.waitKey(30) & 0xFF == ord('q'):
+        if (name is not None):
             break
+    return name;

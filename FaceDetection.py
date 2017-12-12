@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import math
 import cv2
 import numpy as np
@@ -55,6 +56,7 @@ def detectFaces(image, faceCascade, eyeCascade=None, returnGray=True):
 
 if __name__ == '__main__':
 
+#def t():
     cv2.namedWindow("camera", 1)
     capture = cv2.VideoCapture(0)
 

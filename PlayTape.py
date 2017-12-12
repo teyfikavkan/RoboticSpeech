@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from pygame import mixer,time
 import toSpeech
 

@@ -1,4 +1,5 @@
-import toSpeech, PlayTape, BotConnection, SpeechToText
+# -*- coding: utf-8 -*-
+import toSpeech, PlayTape, BotConnection, SpeechToText,checkDB,FaceRecognizer
 
 cnt = 0
 
@@ -20,6 +21,23 @@ def go():
     PlayTape.playTape(tapeName)
 
 
+
+entrysentence=unicode("Merhaba  kartınızı okutabilir misiniz","utf-8")
+PlayTape.playTape(toSpeech.recordTextToSpeech(entrysentence,cnt))
+id=raw_input("Merhaba ID kartınizi okutabilir misiniz?")
+verifiedName=checkDB.copyToTextFile(id);
+print(verifiedName)
+recognizedName=FaceRecognizer.FaceRecognize()
+if(verifiedName==recognizedName):
+    print("Erişime izin verildi")
+    #sentence=unicode("Hoş geldin ")+unicode(recognizedName)+unicode(" nasıl yardımcı olabilirim")
+    #sentence=sentence.encode("utf-8")
+    sentence=unicode("Hoş geldin "+recognizedName+" nasıl yardımcı olabilirim","utf-8")
+    PlayTape.playTape(toSpeech.recordTextToSpeech(sentence, cnt))
+else:
+    print("")
+
 while True == True:
-    go()
-    cnt = cnt + 1
+     go()
+     cnt = cnt + 1
+

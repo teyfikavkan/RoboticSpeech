@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 from os.path import join, isdir
 import cv2
@@ -49,14 +50,14 @@ def extractFaces(a_dir, folder, levelFace=False):
             if not levelFace:
                 result.append(image[y:y+h, x:x+w])
             else:
-                result.append(FaceDetection.levelFace(image, ((x, y, w, h), eyedim)))
-                #result.append(image[y:y+h, x:x+w])
+                #result.append(FaceDetection.levelFace(image, ((x, y, w, h), eyedim)))
+                result.append(image[y:y+h, x:x+w])
     return result
 
 def trainRecognizer(db_folder ,trainSize=FaceConfig.DEFAULT_FACE_SIZE, showFaces=False, forceTrain=False):
-    #recognizer = cv2.face.createLBPHFaceRecognizer()
-    recognizer = cv2.createFisherFaceRecognizer()
-    #recognizer = cv2.face.createEigenFaceRecognizer()
+    recognizer = cv2.createLBPHFaceRecognizer()
+    #recognizer = cv2.createFisherFaceRecognizer()
+    #recognizer = cv2.createEigenFaceRecognizer()
     info=[]
 
     if (not forceTrain) and loadRecognizer(recognizer):
@@ -88,11 +89,12 @@ def trainRecognizer(db_folder ,trainSize=FaceConfig.DEFAULT_FACE_SIZE, showFaces
         cv2.destroyWindow("faces")
 
     recognizer.train(images, np.array(labels))
+    #info.append((0,"Unknown"))
     for key in label_map:
         #print(label_map[key])
         #print(key)
 
-        info.append((key,label_map[key]))
+        info.append((key+1,label_map[key]))
         info2=(key,label_map[key])
         #print(info2)
         #print(info2[1])
@@ -100,7 +102,7 @@ def trainRecognizer(db_folder ,trainSize=FaceConfig.DEFAULT_FACE_SIZE, showFaces
         #print(info[0][1])
 
     saveRecognizer(recognizer)
-    #print(info)
+    print(info)
     return info,recognizer
 
 def saveRecognizer(recognizer, filename=FaceConfig.RECOGNIZER_OUTPUT_FILE):
