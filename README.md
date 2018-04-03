@@ -34,8 +34,7 @@ Robotic speech project with artificial intelligence of graduation project
                      \:./ _  _ ___  ____ ____ _    _ _ _ _ _  _ ___\      
                      \./  |\/| |__) |___ |___ |___ _X_ _X_  \/  _|_ \      
 
-                                      Hi I'm TeyfoKral
-
+                                  
 
 
 
