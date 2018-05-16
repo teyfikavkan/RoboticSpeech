@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import tkMessageBox
-from Tkinter import *
+from Tkinter import Tk, Button
 import ttk
-import BotConnection
 from json import dumps
 from firebase import firebase
 
@@ -16,12 +15,11 @@ print len(result)   # kaç tane cevapsız soru olduğunu gösteriyor
 
 root = Tk()
 
-
 tree = ttk.Treeview(root)
 
 tree["columns"]=("one","two")
 tree.column("one", width=250 )
-tree.column("two", width=400)
+tree.column("two", width=250)
 tree.heading("one", text="KEY")
 tree.heading("two", text="SORU")
 
@@ -42,51 +40,16 @@ def delete():
     selected_item = tree.selection()[0] ## get selected item
     curItem = tree.focus()
     print tree.item(curItem)
-    print tree.item(curItem)['values'][2]
+    print tree.item(curItem)['values'][0]
     tkMessageBox.showinfo("Information", str(tree.item(curItem)['text']) + " has been deleted!")
     firebase.delete('/UnansweredQuestions', tree.item(curItem)['values'][0])
     tree.delete(selected_item)
 
-def addAnswer():
-    global strEntryAnswer
-    global strEntrySablon
-    contentEntry = strEntryAnswer.get()
-    contentSablon = strEntrySablon.get()
-
-    curItem = tree.focus()
-
-
-    print contentEntry
-
-    query = ' {!RET cmdaddresponsewithpatterns '+tree.item(curItem)['values'][1]+','+contentSablon+','+ contentEntry+'!}-'
-    print query
-
-    print BotConnection.connectBot(query);
-
-
-    #firebase.delete('/UnansweredQuestions', tree.item(curItem)['values'][0])
-    #tree.delete(selected_item)
-
 tree.pack()
 button_del = Button(root, text="del", command=delete)
-button_del.pack( padx=5, pady=5)
-button_refresh = Button(root, text="refresh", command=refresh)
-button_refresh.pack( padx=5, pady=5)
-
-strEntrySablon = StringVar()
-entry_sablon = Entry(width = 70,  textvariable=strEntrySablon)
-strEntrySablon.set('.*')
-entry_sablon.pack( padx=5, pady=5)
-
-strEntryAnswer = StringVar()
-entry_answer = Entry(width = 70, textvariable=strEntryAnswer)
-entry_answer.pack( padx=5, pady=5)
-strEntryAnswer.set('Buraya cevabı giriniz')
-
-button_enter = Button(root, text="Add Answer", command=addAnswer)
-button_enter.pack()
-
-
+button_del.pack()
+button_del = Button(root, text="refresh", command=refresh)
+button_del.pack()
 
 
 root.mainloop()
